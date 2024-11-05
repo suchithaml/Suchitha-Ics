@@ -1,0 +1,292 @@
+using System;
+
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+
+        static void Main(string[] args)
+        {
+            Console.Write("Enter the first number: ");
+            int num1 = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter the second number: ");
+            int num2 = int.Parse(Console.ReadLine());
+
+            Console.WriteLine($"\nBefore Swapping: num1 = {num1}, num2 = {num2}");
+
+            
+            int temp = num1;
+            num1 = num2;
+            num2 = temp;
+
+            Console.WriteLine($"After Swapping: num1 = {num1}, num2 = {num2}");
+            Console.ReadLine();
+        }
+    }
+}
+
+output:
+Enter the first number: 9876
+Enter the second number: 5675
+
+Before Swapping: num1 = 9876, num2 = 5675
+After Swapping: num1 = 5675, num2 = 9876
+
+
+2. Write a C# program that takes a number as input and displays it four times in a row (separated by blank spaces), and then four times in the next row, with no separation. You should do it twice: Use the console. Write and use {0}.
+
+using System;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        private static object number;
+        private static object i;
+
+        static void Main(string[] args)
+        {
+            Console.Write("Enter a digit: ");
+            int number = int.Parse(Console.ReadLine());
+
+           
+            Console.WriteLine("{0} {0} {0} {0}", number);  
+            Console.WriteLine("{0}{0}{0}{0}", number);     
+            Console.WriteLine("{0} {0} {0} {0}", number);  
+            Console.WriteLine("{0}{0}{0}{0}", number);     
+            Console.ReadLine();
+        }
+        
+        }
+    }
+
+
+
+output
+
+Enter a digit: 5
+5 5 5 5
+5555
+5 5 5 5
+5555
+
+
+3. Write a C# Sharp program to read any day number as an integer and display the name of the day as a word.
+
+using System;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        private static object number;
+        private static object i;
+
+        static void Main(string[] args)
+        {
+            Console.Write("Enter a day number (1 for Monday, 2 for Tuesday, ..., 7 for Sunday): ");
+            int dayNumber = int.Parse(Console.ReadLine());
+
+           
+            string dayName;
+
+            switch (dayNumber)
+            {
+                case 1:
+                    dayName = "Monday";
+                    break;
+                case 2:
+                    dayName = "Tuesday";
+                    break;
+                case 3:
+                    dayName = "Wednesday";
+                    break;
+                case 4:
+                    dayName = "Thursday";
+                    break;
+                case 5:
+                    dayName = "Friday";
+                    break;
+                case 6:
+                    dayName = "Saturday";
+                    break;
+                case 7:
+                    dayName = "Sunday";
+                    break;
+                default:
+                    dayName = "Invalid day number";
+                    break;
+            }
+
+           
+            Console.WriteLine($"The day is: {dayName}");
+            Console.ReadLine();
+        }
+        
+        }
+    }
+
+output
+Enter a day number (1 for Monday, 2 for Tuesday, ..., 7 for Sunday): 7
+The day is: Sunday
+
+
+
+4.    Write a  Program to assign integer values to an array  and then print the following
+	a.	Average value of Array elements
+	b.	Minimum and Maximum value in an array
+
+using System;
+using System.Linq;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+       
+
+        static void Main(string[] args)
+        {
+            int[] numbers = { 5, 10, 15, 20, 25, 30 };
+
+            double average = numbers.Average();
+
+            int minValue = numbers.Min();
+            int maxValue = numbers.Max();
+
+           
+            Console.WriteLine($"Average value of array elements: {average}");
+            Console.WriteLine($"Minimum value in the array: {minValue}");
+            Console.WriteLine($"Maximum value in the array: {maxValue}");
+            Console.ReadLine();
+        }
+        
+        }
+    }
+output:
+
+Average value of array elements: 17.5
+Minimum value in the array: 5
+Maximum value in the array: 30
+
+
+2.	Write a program in C# to accept ten marks and display the following
+	a.	Total
+	b.	Average
+	c.	Minimum marks
+	d.	Maximum marks
+	e.	Display marks in ascending order
+	f.	Display marks in descending order
+using System;
+using System.Linq;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+       
+
+        static void Main(string[] args)
+        {
+            int[] marks = new int[10];
+
+            Console.WriteLine("Enter 10 marks:");
+            for (int i = 0; i < 10; i++)
+            {
+                Console.Write($"Mark {i + 1}: ");
+                marks[i] = int.Parse(Console.ReadLine());
+            }
+
+            int total = marks.Sum();
+
+            double average = marks.Average();
+
+            int minMarks = marks.Min();
+            int maxMarks = marks.Max();
+
+            Console.WriteLine($"\nTotal marks: {total}");
+            Console.WriteLine($"Average marks: {average}");
+            Console.WriteLine($"Minimum marks: {minMarks}");
+            Console.WriteLine($"Maximum marks: {maxMarks}");
+
+            Console.WriteLine("\nMarks in ascending order:");
+            Array.Sort(marks);
+            foreach (int mark in marks)
+            {
+                Console.Write(mark + " ");
+            }
+
+            Console.WriteLine("\n\nMarks in descending order:");
+            Array.Reverse(marks);
+            foreach (int mark in marks)
+            {
+                Console.Write(mark + " ");
+            }
+            Console.ReadLine();
+        }
+        
+        }
+    }
+
+output:
+
+Enter 10 marks:
+Mark 1: 12
+Mark 2: 3
+Mark 3: 23
+Mark 4: 5
+Mark 5: 12
+Mark 6: 5
+Mark 7: 6
+Mark 8: 34
+Mark 9: 45
+Mark 10: 67
+
+Total marks: 212
+Average marks: 21.2
+Minimum marks: 3
+Maximum marks: 67
+
+Marks in ascending order:
+3 5 5 6 12 12 23 34 45 67
+
+Marks in descending order:
+67 45 34 23 12 12 6 5 5 3
+
+5.  Write a C# Sharp program to copy the elements of one array into another array.(do not use any inbuilt functions)
+using System;
+using System.Linq;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+
+
+        static void Main(string[] args)
+        {
+            int[] sourceArray = { 1, 2, 3, 4, 5 };
+
+            int[] targetArray = new int[sourceArray.Length];
+
+            for (int i = 0; i < sourceArray.Length; i++)
+            {
+                targetArray[i] = sourceArray[i];
+            }
+
+            Console.WriteLine("Elements in the target array:");
+            for (int i = 0; i < targetArray.Length; i++)
+            {
+                Console.Write(targetArray[i] + " ");
+            }
+            Console.ReadLine() ;
+
+        }
+    }
+}
+
+output:
+Elements in the target array:
+1 2 3 4 5
