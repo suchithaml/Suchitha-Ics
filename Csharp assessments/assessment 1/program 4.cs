@@ -4,42 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp6
+public class Program
 {
-    public class Program
+    public static string SwapFirstLast(string str)
     {
-        static int Letterocc(string inputstr, char letter)
+        if (str.Length <= 1)
         {
-            inputstr = inputstr.ToLower();
-            letter = char.ToLower(letter);
-            int count = 0;
-
-            foreach (char c in inputstr)
-            {
-                if (c == letter)
-                {
-                    count++;
-                }
-            }
-            return count;
+            return str;
         }
-        static void Main(string[] args)
-        {
-            Console.WriteLine("enter a string: ");
-            string inputstr = Console.ReadLine();
-            Console.WriteLine("enter count: ");
-            char letterToCount;
-
-            if (char.TryParse(Console.ReadLine(), out letterToCount))
-            {
-                int occurences=Letterocc(inputstr, letterToCount);
-                Console.WriteLine($"the letter '{letterToCount}' appears {occurences} times in the string"); 
-            }
-            else
-            {
-                Console.WriteLine("enter a single character");
-            }
-            Console.ReadLine();
-        }
+        return str[str.Length - 1] + str.Substring(1, str.Length - 2) + str[0];
     }
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("enter the string: ");
+        string userInput = Console.ReadLine();
+
+        string result = SwapFirstLast(userInput);
+        Console.WriteLine("result: " + result);
+        Console.ReadLine();
+    }
+
 }
