@@ -24,5 +24,6 @@ class Program
         {
             Console.WriteLine("An error occurred: " + ex.Message);
         }
+        Console.ReadLine();
     }
 }
