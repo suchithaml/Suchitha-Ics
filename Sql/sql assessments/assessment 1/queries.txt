@@ -1,0 +1,7 @@
+1) select b.title,b.author,r.reviewerName from Books b Join Reviews r on b.Bookid = r.bookId;
+2)select reviewerName from Reviews group by reviewerName having COUNT(bookId)>1;
+3)select date ,count(order_ID) NumofCustomers from Orders group by date having count(order_ID)>1;
+4)  select _name from CustomerQA where _Address like '%o%';
+5)select Gender, Count(Gender) counts from Studentdetails group by Gender;
+6)  select LOWER(Name) AS employeename from Employee where salary IS NULL;
+7)select * from Books where author like '%er';
