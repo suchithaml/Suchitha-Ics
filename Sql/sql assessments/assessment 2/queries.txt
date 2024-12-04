@@ -1,0 +1,58 @@
+queries
+
+1) SELECT DATENAME(WEEKDAY, '2000-12-09') AS DayOfWeek
+
+6) create or alter proc updateSal
+as
+begin
+update e
+set e.sal = e.sal + 500 
+from EMP e
+Join DEPT D ON e.DeptNo = d.Deptno
+where d.Dname = 'Sales' and e.sal < 1500;
+end
+
+exec updateSal;
+select * from Emp;
+
+2) SELECT DATEDIFF(DAY, '2000-12-09', GETDATE()) AS AgeinDays
+
+3) SELECT *
+FROM EMP
+WHERE HIREDATE < DATEADD(YEAR, -5, GETDATE())
+
+4)-a  INSERT INTO Employee (empno, ename, sal, doj)
+VALUES 
+(1, 'John', 5000, '2015-01-01'),
+(2, 'Jane', 6000, '2016-02-01'),
+(3, 'Doe', 7000, '2017-03-01');
+
+-b UPDATE Employee
+SET sal = sal * 1.15
+WHERE empno = 2;
+ 
+ 
+SELECT * FROM Employee 
+
+-c BEGIN TRANSACTION;
+ 
+DELETE FROM Employee
+WHERE empno = 1;
+ROLLBACK;
+ 
+SELECT * FROM Employee
+
+
+5) -a SELECT ename, sal, dbo.CalculateBonus(deptno, sal) AS bonus
+FROM Emp
+WHERE deptno = 10
+
+-b For Deptno 20 employees  20% of sal as bonus
+SELECT ename, sal, dbo.CalculateBonus(deptno, sal) AS bonus
+FROM EMP
+WHERE deptno = 20
+ 
+ 
+--c  SELECT ename, sal, dbo.CalculateBonus(deptno, sal) AS bonus
+FROM EMP
+WHERE deptno NOT IN (10, 20)
