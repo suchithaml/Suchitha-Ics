@@ -1,0 +1,98 @@
+1) Write a T-SQL Program to find the factorial of a given number.
+
+
+DECLARE @Number INT = 5; -- Input number
+DECLARE @Factorial BIGINT = 1; -- Result variable
+
+IF @Number < 0
+BEGIN
+    PRINT 'Factorial is not defined for negative numbers.';
+END
+ELSE
+BEGIN
+    WHILE @Number > 0
+    BEGIN
+        SET @Factorial = @Factorial * @Number;
+        SET @Number = @Number - 1;
+    END
+
+    PRINT 'Factorial is ' + CAST(@Factorial AS VARCHAR);
+END
+
+output: 
+factorial is 120
+
+
+2) Create a stored procedure to generate multiplication table that accepts a number and generates up to a given number. 
+
+CREATE PROCEDURE GenerateMultiplicationTable
+    @Number INT,        -- Number for which the table is generated
+    @Range INT          -- Up to which number the table should be generated
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Loop to generate the multiplication table
+    DECLARE @Counter INT = 1;
+    WHILE @Counter <= @Range
+    BEGIN
+        PRINT CONCAT(@Number, ' x ', @Counter, ' = ', @Number * @Counter);
+        SET @Counter = @Counter + 1;
+    END
+END;
+
+-- to execute
+EXEC GenerateMultiplicationTable @Number = 5, @Range = 10;
+
+output:
+5 x 1 = 5
+5 x 2 = 10
+5 x 3 = 15
+5 x 4 = 20
+5 x 5 = 25
+5 x 6 = 30
+5 x 7 = 35
+5 x 8 = 40
+5 x 9 = 45
+5 x 10 = 50
+
+3) Create a function to calculate the status of the student. If student score >=50 then pass, else fail. Display the data neatly
+
+CREATE FUNCTION GetStudentStatus (@Score INT)
+RETURNS NVARCHAR(10)
+AS
+BEGIN
+    DECLARE @Result NVARCHAR(10);
+
+    IF @Score >= 50
+        SET @Result = 'Pass';
+    ELSE
+        SET @Result = 'Fail';
+
+    RETURN @Result;
+END;
+
+SELECT 
+    s.Sid AS StudentID, 
+    s.Sname AS StudentName, 
+    m.Score AS Score, 
+    dbo.GetStudentStatus(m.Score) AS Status
+FROM 
+    Student s
+JOIN 
+    Marks m ON s.Sid = m.Sid;
+
+output:
+
+1	Jack	23	Fail
+6	Suraj	95	Pass
+4	Praveen	98	Pass
+2	Rithvik	17	Fail
+3      Jaspreeth53	Pass
+5	Bisa	13	Fail
+
+
+
+
+
+

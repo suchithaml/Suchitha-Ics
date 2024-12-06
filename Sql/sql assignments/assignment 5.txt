@@ -1,0 +1,131 @@
+1) 1. Write a T-Sql based procedure to generate complete payslip of a given employee with respect to the following condition
+
+use assignment2
+CREATE OR ALTER PROCEDURE GeneratePayslip
+    @empId INT
+AS
+BEGIN
+    DECLARE @Salary FLOAT
+    DECLARE @HRA FLOAT
+    DECLARE @DA FLOAT
+    DECLARE @PF FLOAT
+    DECLARE @IT FLOAT
+    DECLARE @Deductions FLOAT
+    DECLARE @GrossSalary FLOAT
+    DECLARE @NetSalary FLOAT
+ 
+    -- Fetch Salary from the employee table
+    SELECT @Salary = sal
+    FROM EMP
+    WHERE empno = @empId
+ 
+    -- Calculate HRA, DA, PF, IT
+    SET @HRA = @Salary * 0.10
+    SET @DA = @Salary * 0.20
+    SET @PF = @Salary * 0.08
+    SET @IT = @Salary * 0.05
+ 
+    -- Calculate deductions and gross salary
+    SET @Deductions = @PF + @IT
+    SET @GrossSalary = @Salary + @HRA + @DA
+ 
+    -- Calculate net salary
+    SET @NetSalary = @GrossSalary - @Deductions
+ 
+    -- Print payslip details
+    PRINT 'Employee Payslip for Employee ID: ' + CAST(@empId AS VARCHAR(10))
+    PRINT 'Basic Salary: ' + CAST(@Salary AS VARCHAR(20))
+    PRINT 'HRA: ' + CAST(@HRA AS VARCHAR(20))
+    PRINT 'DA: ' + CAST(@DA AS VARCHAR(20))
+    PRINT 'PF: ' + CAST(@PF AS VARCHAR(20))
+    PRINT 'IT: ' + CAST(@IT AS VARCHAR(20))
+    PRINT 'Total Deductions: ' + CAST(@Deductions AS VARCHAR(20))
+    PRINT 'Gross Salary: ' + CAST(@GrossSalary AS VARCHAR(20))
+    PRINT 'Net Salary: ' + CAST(@NetSalary AS VARCHAR(20))
+END
+
+select * from Emp
+
+-- exec procedure
+EXEC GeneratePayslip @empId = 7369
+
+-- verify
+SELECT * FROM tblEMP
+
+--
+
+output:Employee Payslip for Employee ID: 7369
+Basic Salary: 800
+HRA: 80
+DA: 160
+PF: 64
+IT: 40
+Total Deductions: 104
+Gross Salary: 1040
+Net Salary: 936
+
+-- ---2.Create a trigger to restrict data manipulation on EMP table during General holidays. Display the error message like “Due to Independence day you cannot manipulate data” or "Due To Diwali", you cannot manipulate" etc
+
+CREATE TABLE Holiday (
+    holiday_date DATE PRIMARY KEY,
+    holiday_name VARCHAR(100)
+)
+ 
+ 
+INSERT INTO Holiday (holiday_date, holiday_name)
+VALUES 
+    ('2024-08-15', 'Independence Day'),
+    ('2024-01-26', 'Republic Holiday'),
+    ('2024-12-25', 'Christmas'),
+    ('2025-01-01', 'New Year')
+ 
+ 
+CREATE OR ALTER TRIGGER RestrictDataManipulationOnHolidays
+ON Emp
+INSTEAD OF INSERT, UPDATE, DELETE
+AS
+BEGIN
+    DECLARE @IsHoliday BIT;
+    DECLARE @HolidayName VARCHAR(100);
+ 
+    -- Check if today is a holiday
+    SELECT TOP 1 @HolidayName = holiday_name
+    FROM Holiday
+    WHERE holiday_date = CONVERT(DATE, GETDATE());
+ 
+    IF @HolidayName IS NOT NULL
+    BEGIN
+        -- Raise an error if today is a holiday
+        RAISERROR('Due to %s, you cannot manipulate data.', 16, 1, @HolidayName);
+    END
+    ELSE
+    BEGIN
+        -- If it's not a holiday, allow the operation
+        PRINT 'Data manipulation is allowed on non-holiday dates.';
+       --INSERT INTO Emp (empno, ename, sal) VALUES (1558, 'Samiya', 3000);
+ 
+        UPDATE Emp SET ename = 'SMITH' WHERE ename = 'SMILL';
+ 
+         --DELETE FROM Emp WHERE empno = 1552;
+    END
+END;
+
+SELECT * FROM Emp;
+
+output
+
+
+7369	SMITH	CLERK	7902	1980-12-17	800	NULL	20
+7499	ALLEN	SALESMAN	7698	1981-02-20	1600	300	30
+7521	WARD	SALESMAN	7698	1981-02-22	1250	500	30
+7566	JONES	MANAGER	7839	1981-04-02	2975	NULL	20
+7654	MARTIN	SALESMAN	7698	1981-09-28	1250	1400	30
+7698	BLAKE	MANAGER	7839	1981-05-01	2850	NULL	30
+7782	CLARK	MANAGER	7839	1981-06-09	2450	NULL	10
+7788	SCOTT	ANALYST	7566	1987-04-19	3000	NULL	20
+7839	KING	PRESIDENT	NULL	1981-11-17	5000	NULL	10
+7844	TURNER	SALESMAN	7698	1981-09-08	1500	0	30
+7876	ADAMS	CLERK	7788	1987-05-23	1100	NULL	20
+7900	JAMES	CLERK	7698	1981-12-03	950	NULL	30
+7902	FORD	ANALYST	7566	1981-12-03	3000	NULL	20
+7934	MILLER	CLERK	7782	1982-01-23	1300	NULL	10
