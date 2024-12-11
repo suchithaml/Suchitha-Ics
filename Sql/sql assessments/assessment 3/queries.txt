@@ -62,15 +62,15 @@ SELECT * FROM T_CourseInfo;
 CREATE TABLE ProductsDetails (
     ProductId INT IDENTITY(1,1) PRIMARY KEY,  
     ProductName VARCHAR(100) NOT NULL,
-    Price DECIMAL(10, 2) NOT NULL,
+C
     DiscountedPrice AS (Price - (Price * 0.1)) 
 );
 
 CREATE PROCEDURE InsertProductDetails
     @ProductName VARCHAR(100),
-    @Price DECIMAL(10, 2),
+    @Price FLOAT,
     @GeneratedProductId INT OUTPUT,
-    @DiscountedPrice DECIMAL(10, 2) OUTPUT
+    @DiscountedPrice FLOAT OUTPUT
 AS
 BEGIN
     DECLARE @InsertedProducts TABLE (ProductId INT);
