@@ -75,15 +75,12 @@ AS
 BEGIN
     DECLARE @InsertedProducts TABLE (ProductId INT);
  
-    -- Insert the record and capture the ProductId using OUTPUT
     INSERT INTO ProductsDetails (ProductName, Price)
     OUTPUT INSERTED.ProductId INTO @InsertedProducts
     VALUES (@ProductName, @Price);
  
-    -- Retrieve the captured ProductId
     SELECT @GeneratedProductId = ProductId FROM @InsertedProducts;
  
-    -- Calculate the DiscountedPrice
     SET @DiscountedPrice = @Price - (@Price * 0.1);
 END;
 
