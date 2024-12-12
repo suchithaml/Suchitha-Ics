@@ -85,7 +85,7 @@ BEGIN
 END;
 
 
-DECLARE @GeneratedProductId INT, @DiscountedPrice FLOAT(10, 2);
+DECLARE @GeneratedProductId INT, @DiscountedPrice FLOAT;
  
 -- Call the procedure
 EXEC InsertProductDetails
