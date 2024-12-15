@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <style>
+        /*1.Create the largest heading with the text 'Welcome'. */
+        h1 {
+            font-size: 1em;
+        }
+
+        /*2. Create second highest heading with the text 'About Us'.*/
+        h2 {
+            font-size: 0.5em;
+        }
+
+        /*3. Make third highest heading with the text 'Welcome To HTML' aligned to the center.*/
+        h3 {
+            text-align: center;
+        }
+
+        /*4. Create a heading with the text 'Services' and set its text color to '#0066cc'.*/
+        h4 {
+            color: #0066cc;
+        }
+
+        /*5. Create a heading with underline 'Important' and a font color of '#ff0000'.*/
+        h5 {
+            color: #ff0000;
+            text-decoration: underline;
+        }
+
+        input[type="text"], input[type="password"] {
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome</h1>
+    <hr>
+    <h2>About Us</h2>
+    <hr>
+    <h3>Welcome To HTML</h3>
+    <hr>
+    <h4>Services</h4>
+    <hr>
+    <h5>Important</h5>
+    <hr>
+
+    <!--6. Create a text input field for the user's name.-->
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+    <hr>
+
+    <!-- 7. Make a password input field with a placeholder 'Enter your password'. -->
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Enter your password">
+    <hr>
+
+    <!--8. Create a checkbox input for 'I Agree' with an associated label.-->
+    <label>
+        <input type="checkbox" id="agree" name="agree"> I Agree
+    </label>
+    <hr>
+
+    <!--9. Embed an audio file with the source 'music.mp3' and set controls for playback.-->
+    <audio controls>
+        <source src="music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <hr>
+
+    <!--10. Make an unordered list with two items: 'Red', 'Blue'.-->
+    <ul>
+        <li>Red</li>
+        <li>Blue</li>
+    </ul>
+
+</body>
+</html>
