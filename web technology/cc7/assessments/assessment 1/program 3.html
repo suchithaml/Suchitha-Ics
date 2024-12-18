@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Button Click Event</title>
+</head>
+<body>
+    <h2>Click Event Example</h2>
+
+    <button id="myButton">click here pls!!!!</button>
+
+    <script>
+        const button = document.getElementById("myButton");
+
+        button.addEventListener("click", function () {
+            console.log("Button is clicked!");
+            alert("Button is clicked!");
+        });
+    </script>
+</body>
+</html>

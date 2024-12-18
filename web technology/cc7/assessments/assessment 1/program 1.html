@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Multiplication and Division</title>
+</head>
+<body>
+    <h2>Multiplication and Division</h2>
+
+    <label>1st Number :</label>
+    <input type="number" id="num1" placeholder="Enter 1st no"><br><br>
+    <label>2nd Number :</label>
+    <input type="number" id="num2" placeholder="Enter 2nd no"><br><br>
+
+    <button onclick="multiply()">Multiply</button>
+    <button onclick="divide()">Divide</button><br><br>
+
+    <div>
+        <strong>The Result Is :</strong>
+        <span id="result"></span>
+    </div>
+
+    <script>
+        function multiply() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+
+            if (isNaN(num1) || isNaN(num2)) {
+                document.getElementById('result').innerText = "Please enter valid numbers.";
+                return;
+            }
+
+            const product = num1 * num2;
+            document.getElementById('result').innerText = product;
+        }
+
+        function divide() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+
+            if (isNaN(num1) || isNaN(num2)) {
+                document.getElementById('result').innerText = "Please enter valid numbers.";
+                return;
+            }
+
+            if (num2 === 0) {
+                document.getElementById('result').innerText = "Division by zero is not allowed.";
+                return;
+            }
+
+            const quotient = num1 / num2;
+            document.getElementById('result').innerText = quotient;
+        }
+    </script>
+</body>
+</html>
