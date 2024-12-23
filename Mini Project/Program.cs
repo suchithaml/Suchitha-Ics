@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -102,22 +103,38 @@ namespace RailwayReservation
 
             Console.Write("New Train Name: ");
             string name = Console.ReadLine();
-            Console.Write("New First Class Berths: ");
-            int firstClass = int.Parse(Console.ReadLine());
+            Console.Write("New Source: ");
+            string source = Console.ReadLine();
+            Console.Write("New Destination: ");
+            string destination = Console.ReadLine();
+            Console.Write("New Departure Time (HH:MM): ");
+            string departureTime = Console.ReadLine();
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "UPDATE Trains SET TrainName=@Name, FirstClassBerths=@FirstClass WHERE TrainNo=@TrainNo";
+                string query = "UPDATE Trains SET TrainName=@Name, Source=@Source, Destination=@Destination, DepartureTime=@DepartureTime WHERE TrainNo=@TrainNo";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@TrainNo", trainNo);
                 cmd.Parameters.AddWithValue("@Name", name);
-                cmd.Parameters.AddWithValue("@FirstClass", firstClass);
+                cmd.Parameters.AddWithValue("@Source", source);
+                cmd.Parameters.AddWithValue("@Destination", destination);
+                cmd.Parameters.AddWithValue("@DepartureTime", departureTime);
 
                 conn.Open();
-                cmd.ExecuteNonQuery();
-                Console.WriteLine("Train Modified Successfully!");
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    Console.WriteLine("Train Modified Successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Error: Train not found.");
+                }
             }
         }
+
+
 
         // Delete Train (Soft Delete)
         static void DeleteTrain()
@@ -138,9 +155,10 @@ namespace RailwayReservation
         }
 
         // User Menu
+        // User Menu
         static void UserMenu()
         {
-            Console.WriteLine("1. Book Ticket\n2. Cancel Ticket\n3. Show All Trains\n4. Exit");
+            Console.WriteLine("1. Book Ticket\n2. Cancel Ticket\n3. Show All Trains\n4. View Booked Tickets\n5. Exit");
             int choice = int.Parse(Console.ReadLine());
 
             switch (choice)
@@ -155,9 +173,16 @@ namespace RailwayReservation
                     DisplayTrains();
                     break;
                 case 4:
+                    ShowBookedTickets();
+                    break;
+                case 5:
                     return;
+                default:
+                    Console.WriteLine("Invalid choice!");
+                    break;
             }
         }
+
 
         // Ticket Booking
         static void TicketBooking()
@@ -166,40 +191,76 @@ namespace RailwayReservation
             int trainNo = int.Parse(Console.ReadLine());
             Console.Write("Enter Class (First/Second/Sleeper): ");
             string trainClass = Console.ReadLine();
-            Console.Write("Enter Passenger Name: ");
-            string passenger = Console.ReadLine();
             Console.Write("Enter Journey Date (YYYY-MM-DD): ");
             string date = Console.ReadLine();
+            Console.Write("Enter Number of Passengers: ");
+            int numPassengers = int.Parse(Console.ReadLine());
 
-            // Check if there are available seats for the specified class
+            List<string> passengerNames = new List<string>();
+            for (int i = 0; i < numPassengers; i++)
+            {
+                Console.Write($"Enter Passenger Name {i + 1}: ");
+                passengerNames.Add(Console.ReadLine());
+            }
+
+            // Check if there are enough available seats for the specified class
             int availableSeats = GetAvailableSeats(trainNo, trainClass);
 
-            if (availableSeats > 0)
+            if (availableSeats >= numPassengers)
             {
-                // Proceed with the booking if seats are available
+                // Proceed with booking for each passenger if seats are available
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    string query = "INSERT INTO Bookings (TrainNo, Class, PassengerName, JourneyDate) VALUES (@TrainNo, @Class, @Passenger, @JourneyDate)";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@TrainNo", trainNo);
-                    cmd.Parameters.AddWithValue("@Class", trainClass);
-                    cmd.Parameters.AddWithValue("@Passenger", passenger);
-                    cmd.Parameters.AddWithValue("@JourneyDate", date);
-
                     conn.Open();
-                    cmd.ExecuteNonQuery();
-                    Console.WriteLine("Ticket Booked Successfully!");
+                    SqlTransaction transaction = conn.BeginTransaction(); // Begin transaction
 
-                    // Display the booking details
-                    ShowBookedTicketDetails(trainNo, trainClass, passenger, date);
+                    try
+                    {
+                        List<int> bookingIDs = new List<int>(); // List to store generated booking IDs
+
+                        foreach (string passenger in passengerNames)
+                        {
+                            string query = "INSERT INTO Bookings (TrainNo, Class, PassengerName, JourneyDate) " +
+                                           "OUTPUT INSERTED.BookingID VALUES (@TrainNo, @Class, @Passenger, @JourneyDate)";
+                            SqlCommand cmd = new SqlCommand(query, conn, transaction);
+                            cmd.Parameters.AddWithValue("@TrainNo", trainNo);
+                            cmd.Parameters.AddWithValue("@Class", trainClass);
+                            cmd.Parameters.AddWithValue("@Passenger", passenger);
+                            cmd.Parameters.AddWithValue("@JourneyDate", date);
+
+                            int bookingID = (int)cmd.ExecuteScalar(); // Retrieve the BookingID of the inserted row
+                            bookingIDs.Add(bookingID);
+                        }
+
+                        transaction.Commit(); // Commit transaction
+                        Console.WriteLine("Tickets Booked Successfully!");
+
+                        // Display the details of all booked tickets
+                        Console.WriteLine("\n---- Ticket Details ----");
+                        for (int i = 0; i < numPassengers; i++)
+                        {
+                            Console.WriteLine($"Booking ID: {bookingIDs[i]}");
+                            Console.WriteLine($"Passenger Name: {passengerNames[i]}");
+                            Console.WriteLine($"Train No: {trainNo}");
+                            Console.WriteLine($"Class: {trainClass}");
+                            Console.WriteLine($"Journey Date: {date}");
+                            Console.WriteLine("-----------------------");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback(); // Rollback transaction on error
+                        Console.WriteLine($"Error: {ex.Message}");
+                    }
                 }
             }
             else
             {
-                // Display error message if no seats are available
-                Console.WriteLine("Error: No available seats in the selected class for the specified train.");
+                Console.WriteLine("Error: Not enough available seats in the selected class for the specified train.");
             }
         }
+
+
 
         // Method to check available seats for a specific train and class
         static int GetAvailableSeats(int trainNo, string trainClass)
@@ -287,6 +348,46 @@ namespace RailwayReservation
                 }
             }
         }
+        static void ShowBookedTickets()
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT b.BookingID, b.PassengerName, b.Class, b.JourneyDate, b.Status, " +
+                               "t.TrainName, t.Source, t.Destination, t.DepartureTime " +
+                               "FROM Bookings b " +
+                               "INNER JOIN Trains t ON b.TrainNo = t.TrainNo " +
+                               "WHERE b.Status = 'Booked'";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    Console.WriteLine("\n---- Booked Tickets ----");
+
+                    while (reader.Read())
+                    {
+                        Console.WriteLine($"Booking ID: {reader["BookingID"]}");
+                        Console.WriteLine($"Passenger Name: {reader["PassengerName"]}");
+                        Console.WriteLine($"Class: {reader["Class"]}");
+                        Console.WriteLine($"Journey Date: {reader["JourneyDate"]}");
+                        Console.WriteLine($"Train Name: {reader["TrainName"]}");
+                        Console.WriteLine($"From: {reader["Source"]}");
+                        Console.WriteLine($"To: {reader["Destination"]}");
+                        Console.WriteLine($"Departure Time: {reader["DepartureTime"]}");
+                        Console.WriteLine($"Status: {reader["Status"]}");
+                        Console.WriteLine("------------------------");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No booked tickets found.");
+                }
+            }
+        }
+
 
         // Ticket Cancellation
         static void TicketCancellation()
