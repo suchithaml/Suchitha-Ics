@@ -13,7 +13,7 @@ namespace RailwayReservation
         {
             while (true)
             {
-                Console.WriteLine("1. Admin\n2. User\n3. Exit");
+                Console.WriteLine("Welcome!!\n\n1. Admin\n2. User\n3. Exit");
                 int choice = int.Parse(Console.ReadLine());
 
                 switch (choice)
@@ -77,23 +77,38 @@ namespace RailwayReservation
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "INSERT INTO Trains (TrainNo, TrainName, Source, Destination, FirstClassBerths, SecondClassBerths, SleeperBerths, DepartureTime, IsActive) " +
-                               "VALUES (@TrainNo, @Name, @Source, @Destination, @FirstClass, @SecondClass, @Sleeper, @DepartureTime, 1)";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@TrainNo", trainNo);
-                cmd.Parameters.AddWithValue("@Name", name);
-                cmd.Parameters.AddWithValue("@Source", source);
-                cmd.Parameters.AddWithValue("@Destination", destination);
-                cmd.Parameters.AddWithValue("@FirstClass", firstClass);
-                cmd.Parameters.AddWithValue("@SecondClass", secondClass);
-                cmd.Parameters.AddWithValue("@Sleeper", sleeper);
-                cmd.Parameters.AddWithValue("@DepartureTime", departureTime);
+                string checkQuery = "SELECT COUNT(*) FROM Trains WHERE TrainNo = @TrainNo";
+                string insertQuery = "INSERT INTO Trains (TrainNo, TrainName, Source, Destination, FirstClassBerths, SecondClassBerths, SleeperBerths, DepartureTime) " +
+                                     "VALUES (@TrainNo, @Name, @Source, @Destination, @FirstClass, @SecondClass, @Sleeper, @DepartureTime)";
+
+                SqlCommand checkCmd = new SqlCommand(checkQuery, conn);
+                checkCmd.Parameters.AddWithValue("@TrainNo", trainNo);
 
                 conn.Open();
-                cmd.ExecuteNonQuery();
-                Console.WriteLine("Train Added Successfully!");
+
+                int existingRecords = (int)checkCmd.ExecuteScalar();
+                if (existingRecords > 0)
+                {
+                    Console.WriteLine("Error: A train with this Train No already exists.");
+                }
+                else
+                {
+                    SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
+                    insertCmd.Parameters.AddWithValue("@TrainNo", trainNo);
+                    insertCmd.Parameters.AddWithValue("@Name", name);
+                    insertCmd.Parameters.AddWithValue("@Source", source);
+                    insertCmd.Parameters.AddWithValue("@Destination", destination);
+                    insertCmd.Parameters.AddWithValue("@FirstClass", firstClass);
+                    insertCmd.Parameters.AddWithValue("@SecondClass", secondClass);
+                    insertCmd.Parameters.AddWithValue("@Sleeper", sleeper);
+                    insertCmd.Parameters.AddWithValue("@DepartureTime", departureTime);
+
+                    insertCmd.ExecuteNonQuery();
+                    Console.WriteLine("Train Added Successfully!");
+                }
             }
         }
+
 
         // Update Train
         static void UpdateTrain()
@@ -136,25 +151,47 @@ namespace RailwayReservation
 
 
 
-        // Delete Train (Soft Delete)
+        // Delete Train
         static void DeleteTrain()
         {
-            Console.Write("Enter Train No to Delete (Soft Delete): ");
+            Console.Write("Enter Train No to Delete: ");
             int trainNo = int.Parse(Console.ReadLine());
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "UPDATE Trains SET IsActive=0 WHERE TrainNo=@TrainNo";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@TrainNo", trainNo);
+                try
+                {
+                    conn.Open();
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                Console.WriteLine("Train Deleted Successfully!");
+                    // First delete all bookings referencing the TrainNo
+                    string deleteBookingsQuery = "DELETE FROM Bookings WHERE TrainNo=@TrainNo";
+                    SqlCommand deleteBookingsCmd = new SqlCommand(deleteBookingsQuery, conn);
+                    deleteBookingsCmd.Parameters.AddWithValue("@TrainNo", trainNo);
+                    deleteBookingsCmd.ExecuteNonQuery();
+
+                    // Then delete the train
+                    string deleteTrainQuery = "DELETE FROM Trains WHERE TrainNo=@TrainNo";
+                    SqlCommand deleteTrainCmd = new SqlCommand(deleteTrainQuery, conn);
+                    deleteTrainCmd.Parameters.AddWithValue("@TrainNo", trainNo);
+                    int rowsAffected = deleteTrainCmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        Console.WriteLine("Train deleted successfully!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: Train not found.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
             }
         }
 
-        // User Menu
+
         // User Menu
         static void UserMenu()
         {
@@ -232,7 +269,7 @@ namespace RailwayReservation
                             bookingIDs.Add(bookingID);
                         }
 
-                        transaction.Commit(); // Commit transaction
+                        transaction.Commit();
                         Console.WriteLine("Tickets Booked Successfully!");
 
                         // Display the details of all booked tickets
@@ -256,7 +293,7 @@ namespace RailwayReservation
             }
             else
             {
-                Console.WriteLine("Error: Not enough available seats in the selected class for the specified train.");
+                Console.WriteLine("Error: can't book the ticket.");
             }
         }
 
@@ -331,12 +368,11 @@ namespace RailwayReservation
             }
         }
 
-        // Display All Active Trains
         static void DisplayTrains()
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "SELECT * FROM Trains WHERE IsActive=1";
+                string query = "SELECT * FROM Trains";
                 SqlCommand cmd = new SqlCommand(query, conn);
 
                 conn.Open();
