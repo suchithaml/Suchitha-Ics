@@ -1,12 +1,24 @@
 ﻿
-@model dynamic
+@model IEnumerable<NorthwindApp.Models.Customer>
 
-<h2>Customer Details for Order #10248</h2>
-<div>
-    <p><strong>Contact Name:</strong> @Model.ContactName</p>
-    <p><strong>Company Name:</strong> @Model.CompanyName</p>
-    <p><strong>Address:</strong> @Model.Address</p>
-    <p><strong>City:</strong> @Model.City</p>
-    <p><strong>Country:</strong> @Model.Country</p>
-</div>
 
+<h2>CustomersInGermany</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Contact Name</th>
+            <th>Company Name</th>
+            <th>City</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.ContactName</td>
+                <td>@customer.CompanyName</td>
+                <td>@customer.City</td>
+            </tr>
+        }
+    </tbody>
+</table>
