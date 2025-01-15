@@ -1,0 +1,50 @@
+﻿@model List<ETradingClient.Models.CartItem>
+
+<div> Welcome, @ViewBag.Username! </div>
+<h2>Your Cart</h2>
+
+@if (Model == null || !Model.Any())
+{
+<p>Your cart is empty.</p> }
+            else
+            {
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>
+        @*<img src="@item.ImageUrl" alt="@item.ProductName" style="width: 50px;" />*@
+        @item.ProductName
+    </td>
+    <td>@item.Price</td>
+    <td>@item.Quantity</td>
+    <td>@(item.Quantity * item.Price)</td>
+    <td>
+        @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
+        {
+@Html.AntiForgeryToken()
+                        <input type="hidden" name="productId" value="@item.ProductID" />
+                                                <button type="submit" class="btn btn-danger">Remove</button>}
+    </td>
+</tr>}
+    </tbody>
+</table>}
+
+<div>
+    <h3>Total: @Model.Sum(x => x.Price * x.Quantity).ToString("C")</h3>
+    <form action="@Url.Action("Process", "CheckOut")" method="post">
+        <input type="hidden" name="customerId" value="@Session["UserID"]" />
+        <input type="hidden" name="vendorId" value="6" />
+        <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
+    </form>
+</div>

@@ -1,0 +1,39 @@
+﻿
+@model List<Webapi_client.Models.CartItem>
+
+<div>
+    <h2>Checkout</h2>
+
+    @if (Model == null || !Model.Any())
+    {
+<p>Your cart is empty.</p> }
+            else
+            {
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>@item.ProductName</td>
+    <td>@item.Price.ToString("C")</td>
+    <td>@item.Quantity</td>
+    <td>@(item.Quantity * item.Price).ToString("C")</td>
+</tr>                }
+    </tbody>
+</table>
+
+                <div>
+                    <h3>Total: @Model.Sum(x => x.Price * x.Quantity).ToString("C")</h3>
+                    <form action="@Url.Action("Process", "Checkout")" method="post">
+                        <button type="submit" class="btn btn-primary">Confirm Checkout</button>
+                    </form>
+                </div>}
+</div>

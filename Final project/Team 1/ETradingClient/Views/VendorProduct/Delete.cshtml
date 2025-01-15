@@ -1,0 +1,24 @@
+﻿@model ETradingClient.Models.Product
+ 
+@{
+    ViewBag.Title = "Delete Product";
+}
+ 
+<h2>@ViewBag.Title</h2>
+ 
+<p>Are you sure you want to delete this product?</p>
+ 
+<div>
+<b>Product Name:</b> @Model.ProductName <br />
+<b>Price:</b> @Model.Price <br />
+<b>Stock:</b> @Model.Stock <br />
+</div>
+ 
+@using (Html.BeginForm("Delete", "VendorProduct", new { id = Model.ProductID }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<button type="submit" class="btn btn-danger">Delete</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary" })
+}
+
+

@@ -1,0 +1,20 @@
+﻿
+@if (TempData["Error"] != null)
+{
+<div class="alert alert-danger">
+    @TempData["Error"]
+</div>}
+
+@if (TempData["Success"] != null)
+{
+<div class="alert alert-success">
+    @TempData["Success"]
+</div>}
+
+<h2>Checkout</h2>
+<!-- Checkout form -->
+<form action="@Url.Action("Checkout", "Orders")" method="post">
+    <input type="hidden" name="customerId" value="1" />
+    <input type="hidden" name="vendorId" value="2" />
+    <button type="submit" class="btn btn-primary">Place Order</button>
+</form>

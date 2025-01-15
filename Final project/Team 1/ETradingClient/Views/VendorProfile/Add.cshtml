@@ -1,0 +1,60 @@
+﻿@model ETradingClient.Models.Vendor
+
+@{ ViewBag.Title = "Add / Update Vendor"; }
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Username != null)
+{
+<p>Welcome, @ViewBag.Username</p>}
+
+@using (Html.BeginForm("Add", "VendorProfile", FormMethod.Post))
+{
+@Html.AntiForgeryToken()
+
+                <div class="form-group" style="display:none">
+                    @Html.HiddenFor(m => m.VendorID, new { Value = Session["UserID"].ToString() })
+                    @Html.ValidationMessageFor(m => m.VendorID)
+                </div>
+
+
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.VendorName)
+                                    @Html.TextBoxFor(m => m.VendorName, new { @class = "form-control", @placeholder = "Enter Vendor Name" })
+                                    @Html.ValidationMessageFor(m => m.VendorName)
+                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.VendorCompanyPhoneNo)
+                                                    @Html.TextBoxFor(m => m.VendorCompanyPhoneNo, new { @class = "form-control", @placeholder = "Enter Company Phone Number" })
+                                                    @Html.ValidationMessageFor(m => m.VendorCompanyPhoneNo)
+                                                </div>
+
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(m => m.VendorCompanyAddress)
+                                                                    @Html.TextAreaFor(m => m.VendorCompanyAddress, new { @class = "form-control", @placeholder = "Enter Company Address" })
+                                                                    @Html.ValidationMessageFor(m => m.VendorCompanyAddress)
+                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    @Html.LabelFor(m => m.VendorCompanyEmailID)
+                                                                                    @Html.TextBoxFor(m => m.VendorCompanyEmailID, new { @class = "form-control", @placeholder = "Enter Company Email ID" })
+                                                                                    @Html.ValidationMessageFor(m => m.VendorCompanyEmailID)
+                                                                                </div>
+
+                                                                                                <div class="form-group">
+                                                                                                    @Html.LabelFor(m => m.VendorCompanyName)
+                                                                                                    @Html.TextBoxFor(m => m.VendorCompanyName, new { @class = "form-control", @placeholder = "Enter Company Name" })
+                                                                                                    @Html.ValidationMessageFor(m => m.VendorCompanyName)
+                                                                                                </div>
+
+                                                                                                                <div class="form-group" style="display:none">
+                                                                                                                    @Html.LabelFor(m => m.VendorIsActive)
+                                                                                                                    @Html.CheckBoxFor(m => m.VendorIsActive)
+                                                                                                                    @Html.ValidationMessageFor(m => m.VendorIsActive)
+                                                                                                                </div>
+
+
+                                                                                                                                <button type="submit" class="btn btn-primary">Save</button>
+}

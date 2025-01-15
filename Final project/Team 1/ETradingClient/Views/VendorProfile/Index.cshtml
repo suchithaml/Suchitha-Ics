@@ -1,0 +1,31 @@
+﻿@model ETradingClient.Models.Vendor
+
+@{ ViewBag.Title = "Vendor Profile"; }
+
+<h2>Vendor Profile</h2>
+
+@* Display error message if profile is not found *@
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@* Display vendor profile details *@
+@if (Model != null)
+{
+    <div class="profile-info">
+        <h3>@Model.VendorName</h3>
+        <p><strong>Company Name:</strong> @Model.VendorCompanyName</p>
+        <p><strong>Email:</strong> @Model.VendorCompanyEmailID</p>
+        <p><strong>Phone:</strong> @Model.VendorCompanyPhoneNo</p>
+        <p><strong>Address:</strong> @Model.VendorCompanyAddress</p>
+        <p><strong>Is Active:</strong> @(Model.VendorIsActive ? "Yes" : "No")</p>
+        <p><strong>Associated Customer ID:</strong> @Model.CustomerID</p>
+    </div>
+}
+else
+{
+    <p>No profile data available.</p>
+}

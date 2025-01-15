@@ -1,0 +1,212 @@
+﻿@model IEnumerable<ETradingClient.Models.mdlAuthorizationPendingVendors>
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@{
+    ViewBag.Title = "Authorization Pending";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1b6ae7;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 30px;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #1b6ae7;
+            color: white;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            font-size: 16px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background-color: #1b6ae7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #3a506b;
+        }
+
+        footer {
+            background-color: #1b6ae7;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+
+        h3.error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>@ViewBag.Title</h2>
+</header>
+
+<div class="container" style="width:90%" >
+    <table class="table">
+        <tr>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.VendorID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorCompanyPhoneNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorCompanyAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorCompanyEmailID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorCompanyName)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.UserID)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.IsVendor)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Status</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.VendorID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorCompanyPhoneNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorCompanyAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorCompanyEmailID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorCompanyName)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.UserID)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.IsVendor)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <select onchange="updateActionAndSubmit(this, @item.VendorID)">
+                        <option value="Pending" >Pending</option>
+                        <option value="Approved" >Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+
+                    <script>
+                        function updateActionAndSubmit(selectElement, id) {
+                            var ApprovedStatus = selectElement.value;
+                            document.querySelector("input[name='ApprovedStatus']").value = ApprovedStatus;
+                            document.getElementById("CurVendorID").value = id;
+
+                            var form = document.getElementById("MyForm");
+                            form.submit();
+                        }
+                    </script>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <form id="MyForm" action="UpdateAuthorizationStatus" method="post" style="display:none">
+        <input type="text" id="CurVendorID" name="CurVendorID" value="" style="display:block" />
+        <input type="text" name="ApprovedStatus" value="" style="display:block" />
+    </form>
+
+    <h3 class="error-message">@Html.Raw(@ViewBag.ErrorMessage)</h3>
+</div>
+
+<footer>
+    <p>&copy; 2025 ETradingClient. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+﻿@model ETradingClient.Models.mdlTopSellingProductByVendorResult
+
+@{ ViewBag.Title = "TopSellingProductsByVendor"; }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Apply the requested font family */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f6f9; /* Light background color for better contrast */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header Style */
+        header {
+            background-color: #1b6ae7; /* Updated Blue Color */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px; /* Add spacing between header and content */
+        }
+
+        h2 {
+            color: #ffffff; /* White color for title */
+            font-size: 30px;
+        }
+
+        /* Form and table styles */
+        .container {
+            margin-top: 30px;
+            padding: 0 15px;
+            width: 60%; /* Set the width to 60% */
+            margin: 0 auto; /* Center align the content */
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 30px; /* Space between the form and table */
+        }
+
+        select {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 250px;
+            background-color: #fff;
+            color: #333;
+            margin-right: 10px; /* Add spacing between select box and button */
+        }
+
+        button {
+            background-color: #3a506b; /* Primary Color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px; /* Add margin for spacing */
+        }
+
+            button:hover {
+                background-color: #1c2541; /* Darker shade for hover effect */
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+            table th, table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            table th {
+                background-color: #3a506b; /* Primary Color */
+                color: white;
+            }
+
+            table tr:nth-child(even) {
+                background-color: #f9f9f9; /* Light gray background for alternating rows */
+            }
+
+        /* Footer Style */
+        footer {
+            background-color: #1b6ae7; /* Updated Blue Color */
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>@ViewBag.Title</h2>
+    </header>
+
+    <div class="container">
+        <form action="" method="post">
+            <select name="vendorId">
+                @foreach (var item in Model.mdlGetVendorsTopSellingProductsByVendors)
+                {
+    <option value="@item.VendorID">@item.VendorName</option>}
+            </select>
+            <button type="submit">Show Data</button>
+        </form>
+
+        <table class="table">
+            <tr>
+                <th>Product Name</th>
+                <th>Total Quantity Sold</th>
+            </tr>
+
+            @foreach (var product in Model.mdlReportProductDetails)
+            {
+<tr>
+    <td>@product.ProductName</td>
+    <td>@product.TotalQuantitySold</td>
+</tr>            }
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 ETradingClient. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

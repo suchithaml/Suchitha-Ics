@@ -1,0 +1,20 @@
+﻿@{ ViewBag.Title = "Categories"; }
+
+<h2>Select a Category</h2>
+<div class="category-buttons">
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Electronics" })'">
+        Electronics
+    </button>
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Clothing" })'">
+        Clothing
+    </button>
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Home Appliances" })'">
+        Home Appliances
+    </button>
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Books" })'">
+        Books
+    </button>
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Toys" })'">
+        Toys
+    </button>
+</div>

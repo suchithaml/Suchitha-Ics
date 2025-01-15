@@ -1,0 +1,140 @@
+﻿@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<div>
+    Welcome, @ViewBag.Username!
+</div>
+<div>
+    @ViewBag.UserID
+</div>
+
+<h2>Search Results for '@ViewBag.Query'</h2>
+
+<!-- Filter Section -->
+<div class="filter-section">
+    <button id="filterButton" class="btn btn-filter">Filter</button>
+    <div id="filterOptions" class="filter-options">
+        <label for="priceRange">Price Range:</label>
+        <select id="priceRange" class="price-range">
+            <option value="all">All</option>
+            <option value="low">Below $50</option>
+            <option value="medium">$50 - $100</option>
+            <option value="high">Above $100</option>
+        </select>
+    </div>
+</div>
+
+<!-- Products List -->
+<div id="productsList">
+    @foreach (var product in Model)
+    {
+<div class="product-item" data-price="@product.Price">
+    <img src="@product.ImagePath" alt="@product.ProductName" class="product-image" />
+    <div class="product-info">
+        <h3><a href="@Url.Action("Details", "Products", new { id = product.ProductID })">@product.ProductName</a></h3>
+        <p><strong>Description:</strong> @product.Description</p>
+        <p><strong>Price:</strong> $@product.Price</p>
+        <p><strong>Stock:</strong> @product.Stock</p>
+        <p style="display:none"><strong>Category:</strong> @product.Category</p>
+    </div>
+</div>}
+</div>
+
+<!-- Scripts for filtering -->
+<script>const filterButton = document.getElementById("filterButton");
+    const filterOptions = document.getElementById("filterOptions");
+    const priceRange = document.getElementById("priceRange");
+    const productsList = document.getElementById("productsList");
+
+    // Show/hide filter options when clicking on the filter button
+    filterButton.addEventListener("click", () => {
+filterOptions.style.display = filterOptions.style.display === "none" ? "block" : "none";
+    });
+
+    // Apply price filter when the price range is selected
+    priceRange.addEventListener("change", () => {
+        const selectedPriceRange = priceRange.value;
+        filterProductsByPrice(selectedPriceRange);
+    });
+
+    // Function to filter products by price
+    function filterProductsByPrice(priceRangeValue) {
+        const productItems = productsList.getElementsByClassName('product-item');
+
+        for (const productItem of productItems) {
+            const productPrice = parseFloat(productItem.getAttribute('data-price'));
+
+            // Show/hide products based on the selected filter
+            switch (priceRangeValue) {
+                case "low":
+productItem.style.display = (productPrice < 50) ? 'block' : 'none';
+                    break;
+                case "medium":
+productItem.style.display = (productPrice >= 50 && productPrice <= 100) ? 'block' : 'none';
+                    break;
+                case "high":
+productItem.style.display = (productPrice > 100) ? 'block' : 'none';
+                    break;
+                case "all":
+productItem.style.display = 'block';
+                    break;
+            }
+        }
+    }</script>
+
+<style>
+    /* Basic styling for filter button and options */
+    .filter-section {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .btn-filter {
+        background-color: #3498db;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .filter-options {
+        display: none;
+        margin-top: 10px;
+        background-color: #f1f1f1;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .product-item {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+
+    .product-info h3 {
+        font-size: 1.2rem;
+        color: #333;
+    }
+
+    .product-info p {
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .product-info strong {
+        color: #333;
+    }
+
+    .price-range {
+        padding: 8px;
+        font-size: 1rem;
+        border-radius: 5px;
+    }
+</style>

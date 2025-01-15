@@ -1,0 +1,162 @@
+﻿@model ETradingClient.Models.User
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+
+@{ ViewBag.Title = "Register";
+                Layout = null; }
+
+<style>
+    /* Global Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
+
+    body {
+        background-color: #f4f7fc;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    /* Register Form Container */
+    .login-container {
+        background-color: #fff;
+        padding: 30px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        width: 400px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .login-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 25px;
+        letter-spacing: 1px;
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        background-color: #fafafa;
+        transition: border-color 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #6c63ff;
+            outline: none;
+        }
+
+    /* Button Styles */
+    .btnPrimary {
+        background-color: #0075ff;
+        color: white;
+        font-size: 1.1rem;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #5a54e8;
+        }
+
+    /* Error Message Styling */
+    .message {
+        font-size: 1rem;
+        color: #ff4d4d;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .radio-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+</style>
+
+<div class="login-container">
+    <h2 class="login-title">Register</h2>
+
+    @using (Html.BeginForm())
+    {
+<div class="form-group">
+    @Html.LabelFor(m => m.Username, new { @class = "form-label" })
+    @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+</div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                </div>
+
+                                <div class="radio-group" style="justify-content: space-around">
+                                    <div>
+                                        @Html.RadioButtonFor(m => m.IsCustomer, true, new { @id = "IsCustomer" })
+                                        @Html.LabelFor(m => m.IsCustomer, new { @style = "display:none;" }) Customer
+                                    </div>
+                                    <div>
+                                        @Html.RadioButtonFor(m => m.IsVendor, true, new { @id = "IsVendor" })
+                                        @Html.LabelFor(m => m.IsVendor, new { @style = "display:none;" }) Vendor
+                                    </div>
+                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(m => m.IsAdmin, new { @style = "display:none;" })
+                                                    @Html.CheckBoxFor(m => m.IsAdmin, new { @style = "display:none;" })
+                                                </div>
+
+                                                                <h3 style="color:red">@Html.Raw(@ViewBag.ErrorMessage)</h3>
+
+                                                                                <button type="submit" class="btnPrimary">Register</button>}
+
+    <div style="margin-top: 20px;">
+        @Html.ActionLink("Back to Login", "Login")
+    </div>
+
+    <p class="message">@ViewBag.Message</p>
+</div>
+
+<script>
+    var isVendor = document.getElementById('IsVendor');
+    isVendor.addEventListener('change', function () {
+        if (isVendor.checked) {
+            document.getElementById('IsCustomer').checked = false;
+        }
+    });
+
+    var isCustomer = document.getElementById('IsCustomer');
+    isCustomer.addEventListener('change', function () {
+        if (isCustomer.checked) {
+            document.getElementById('IsVendor').checked = false;
+        }
+    });
+</script>

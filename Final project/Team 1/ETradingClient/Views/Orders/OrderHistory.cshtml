@@ -1,0 +1,40 @@
+﻿
+@model List<ETradingClient.Models.OrderHistoryViewModel>
+
+@{ ViewBag.Title = "Order History"; }
+
+<h2>Order History</h2>
+
+@if (Model == null || !Model.Any())
+{
+<p>@ViewBag.Message</p> }
+            else
+            {
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Order Total</th>
+            <th>Order Status</th>
+            <th>Vendor</th>
+            <th>Order Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+<tr>
+    <td>@order.OrderID</td>
+    <td>@order.OrderDate</td>
+    <td>@order.OrderTotal</td>
+    <td>@order.OrderStatus</td>
+    <td>@order.VendorName</td>
+    <td>
+        @foreach (var detail in order.OrderDetails)
+        {
+<p>@detail.ProductName - @detail.Quantity x @detail.TotalPrice</p>}
+    </td>
+</tr>}
+    </tbody>
+</table>}

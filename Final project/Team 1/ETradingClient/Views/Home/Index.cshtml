@@ -1,0 +1,196 @@
+﻿@{ ViewBag.Title = "Home"; Layout = null; }
+
+<style>
+    /* General Reset */
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    /* Top buttons */
+    .top-buttons {
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px 20px;
+        background-color: #007bff;
+    }
+
+        .top-buttons a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #0056b3;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+
+            .top-buttons a:hover {
+                background-color: #003f72;
+            }
+
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(to right, #007bff, #00c6ff);
+        color: white;
+        padding: 100px 20px;
+        text-align: center;
+    }
+
+        .hero h1 {
+            font-size: 48px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .hero .cta-btn {
+            background-color: white;
+            color: #007bff;
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+            .hero .cta-btn:hover {
+                background-color: #0056b3;
+                color: white;
+            }
+
+    /* Category Cards */
+    .categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 40px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .category-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        padding: 20px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .category-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-card img {
+            max-width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category-card h3 {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .category-card a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
+            transition: color 0.3s;
+        }
+
+            .category-card a:hover {
+                color: #0056b3;
+            }
+
+    /* Footer */
+    .footer {
+        background: #333;
+        color: white;
+        text-align: center;
+        padding: 15px 20px;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+</style>
+
+<!-- Top Buttons Section -->
+<div class="top-buttons">
+    <a href="@Url.Action("Register", "Account")">Register</a>
+    <a href="@Url.Action("Login", "Account")">Login</a>
+</div>
+
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Welcome to E-Trading Platform</h1>
+    <p> Explore a wide variety of products from different categories. Shop easily, securely, and conveniently! </p>
+    <a href="@Url.Action("Login", "Account")" class="cta-btn">Start Shopping</a>
+</div>
+
+<!-- Categories Section -->
+<div class="categories">
+    <div class="category-card">
+        <img src="~/images/Electronics.jpg" alt="Electronics">
+        <h3>Electronics</h3>
+        <a href="@Url.Action("Login", "Account", new { category = "Electronics" })">Explore</a>
+    </div>
+    <div class="category-card">
+        <img src="~/images/Clothing.jpg" alt="Clothing">
+        <h3>Clothing</h3>
+        <a href="@Url.Action("Login", "Account", new { category = "Clothing" })">Explore</a>
+    </div>
+    <div class="category-card">
+        <img src="~/images/HomeApp.jpg" alt="Home Appliances">
+        <h3>Home Appliances</h3>
+        <a href="@Url.Action("Login", "Account", new { category = "Home Appliances" })">Explore</a>
+    </div>
+    <div class="category-card">
+        <img src="~/images/Furniture.jpg" alt="Furniture">
+        <h3>Furniture</h3>
+        <a href="@Url.Action("Login", "Account", new { category = "Furniture" })">Explore</a>
+    </div>
+    <div class="category-card">
+        <img src="~/images/Beauty.jpg" alt="Beauty">
+        <h3>Beauty and Personal Care</h3>
+        <a href="@Url.Action("Login", "Account", new { category = "Beauty" })">Explore</a>
+    </div>
+    <div class="category-card">
+        <img src="~/images/Groceries.jpg" alt="Beauty">
+        <h3>Groceries</h3>
+        <a href="@Url.Action("Login", "Account", new { category = "Groceries" })">Explore</a>
+    </div>
+    <div class="category-card">
+        <img src="~/images/Shoes.jpg" alt="Beauty">
+        <h3>Shoes & Footwear</h3>
+        <a href="@Url.Action("Login", "Account", new { category = "Shoes" })">Explore</a>
+    </div>
+    <div class="category-card">
+        <img src="~/images/Sports.jpg" alt="Beauty">
+        <h3>Sports & Outdoors</h3>
+        <a href="@Url.Action("Login", "Account", new { category = "Sports" })">Explore</a>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    © 2025 E-Trading Platform. All rights reserved.
+</div>

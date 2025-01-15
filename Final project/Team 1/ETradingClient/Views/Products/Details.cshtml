@@ -1,0 +1,195 @@
+﻿@model ETradingClient.Models.Product
+<div class="container">
+    <div class="welcome-message">
+        Welcome, @ViewBag.Username!
+    </div>
+    <h2>Product Details</h2>
+    @if (Model == null)
+    {
+<p class="error-message">Product not found.</p> }
+else
+{
+<div class="product-details">
+    <h3>@Model.ProductName</h3>
+    <img src="@Model.ImagePath" alt="@Model.ProductName" class="product-image" />
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Price:</strong> $@Model.Price</p>
+    <p><strong>Stock:</strong> @Model.Stock</p>
+    @*<p><strong>Category:</strong> @Model.Category</p>*@
+</div>
+                <form id="addToCartForm" action="@Url.Action("AddToCart", "Cart")" method="post" class="product-form">
+                    <input type="hidden" id="productId" name="productId" value="@Model.ProductID" />
+                    <input type="hidden" id="productName" name="productName" value="@Model.ProductName" />
+                    <input type="hidden" id="price" name="price" value="@Model.Price" />
+                    <input type="hidden" id="imageUrl" name="imageUrl" value="@Url.Content("~/" + Model.ImagePath)" />
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input" />
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form> @*<form action="@Url.Action("AddToWishlist", "Wishlist")" method="post" class="product-form">
+                                    <input type="hidden" name="productId" value="@Model.ProductID" />
+                                    <input type="hidden" name="productName" value="@Model.ProductName" />
+                                    <input type="hidden" name="price" value="@Model.Price" />
+                                    <input type="hidden" name="imageUrl" value="@Model.ImagePath" />
+                                    <button type="submit" class="btn btn-secondary">Add to Wishlist</button>
+                                    </form>}*@}
+</div>
+
+@*<script>
+    document.getElementById("addToCartForm").addEventListener("submit", function (event) {
+        const stock = @Model.Stock; // Get stock value from the model
+        const quantityToAdd = parseInt(document.getElementById("quantity").value);
+
+        // Get the current cart from session or local storage
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Check if the product already exists in the cart
+        const existingItem = cart.find(item => item.productId === @Model.ProductID);
+
+        let totalQuantity = quantityToAdd; // Start with the new quantity
+        if (existingItem) {
+            totalQuantity += existingItem.quantity; // Add existing quantity if the product is already in the cart
+        }
+
+        // Check if total quantity exceeds stock
+        if (totalQuantity > stock) {
+            event.preventDefault(); // Prevent form submission
+            alert(`You cannot add more than ${stock} items of this product. You already have ${existingItem ? existingItem.quantity : 0} in the cart.`);
+            return;
+        }
+
+        // If all checks pass, update the cart in local storage (optional)
+        if (existingItem) {
+            existingItem.quantity = totalQuantity; // Update existing quantity
+        } else {
+            // Add the new product to the cart
+            cart.push({
+                productId: @Model.ProductID,
+                productName: '@Model.ProductName',
+                price: @Model.Price,
+                quantity: quantityToAdd,
+                imageUrl: '@Model.ImagePath'
+            });
+        }
+        localStorage.setItem("cart", JSON.stringify(cart)); // Save cart back to local storage
+    });
+</script>*@
+
+<script>
+    document.getElementById("addToCartForm").addEventListener("submit", function (event) {
+        const stock = @Model.Stock; // Get stock value from the model
+        const quantity = parseInt(document.getElementById("quantity").value);
+
+        // Check if the quantity exceeds stock
+        if (quantity > stock) {
+            event.preventDefault(); // Prevent form submission
+            alert(`You cannot select more than ${stock} items. Please reduce the quantity.`);
+        }
+    });
+</script>
+
+
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f7f7f7;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .welcome-message {
+        font-size: 1.2rem;
+        color: #555;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .product-details {
+        text-align: center;
+    }
+
+    .product-image {
+        width: 80%;
+        max-width: 400px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        font-size: 1.8rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 1.1rem;
+        margin: 10px 0;
+        color: #555;
+    }
+
+    strong {
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .product-form {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .quantity-input {
+        width: 60px;
+        padding: 5px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        color: white;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+    .btn-secondary {
+        background-color: #2ecc71;
+        color: white;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+</style>

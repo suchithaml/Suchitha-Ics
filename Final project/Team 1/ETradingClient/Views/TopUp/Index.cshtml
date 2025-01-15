@@ -1,0 +1,149 @@
+﻿@{ ViewBag.Title = "Top-Up"; }
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Top-Up Your Balance</h2>
+
+    <!-- Current Balance -->
+    <div class="balance-info mb-4">
+        <label for="userBalance" class="balance-label">Current Balance: </label>
+        <span id="userBalance" class="balance-value">Loading...</span>
+    </div>
+
+    <!-- Top-Up Form -->
+    <form id="topUpForm" class="topup-form">
+        <div class="form-group">
+            <label for="amount" class="form-label">Amount to Add: </label>
+            <input type="number" id="amount" name="amount" class="form-control" min="0" required />
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-success btn-lg">Add Balance</button>
+        </div>
+    </form>
+</div>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Fetch current balance
+        var userId = @ViewBag.UserID;
+        $.get(`/TopUp/GetBalance?userId=${userId}`, function (data) {
+            $('#userBalance').text(data.balance);
+        });
+
+        // Handle form submission
+        $('#topUpForm').on('submit', function (e) {
+            e.preventDefault();
+            var amount = $('#amount').val();
+            $.post('/TopUp/AddBalance', { UserID: @ViewBag.UserID, Amount: amount }, function (data) {
+                if (data.success) {
+                    alert(data.message);
+                    $('#userBalance').text(parseFloat($('#userBalance').text()) + parseFloat(amount)); // Update balance
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Custom CSS for styling -->
+<style>
+    /* General Styles */
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding-top: 50px;
+    }
+
+    h2 {
+        font-family: 'Arial', sans-serif;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    /* Balance Info Styling */
+    .balance-info {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+        padding: 15px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .balance-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .balance-value {
+        font-size: 20px;
+        color: #2c6ed5;
+    }
+
+    /* Form Styling */
+    .topup-form {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .form-control {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 100%;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
+        }
+
+    /* Button Styling */
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+    /* Alert Messages */
+    .alert {
+        font-size: 16px;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 15px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>

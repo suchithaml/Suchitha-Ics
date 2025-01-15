@@ -1,0 +1,102 @@
+﻿@model ETradingClient.Models.mdlTotalSalesResult
+
+@{ ViewBag.Title = "TotalSales"; }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Apply the requested font family */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f6f9; /* Light background color for better contrast */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header Style */
+        header {
+            background-color: #1b6ae7; /* Sky Blue Color */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px; /* Add spacing between header and content */
+        }
+
+        h2 {
+            color: #ffffff; /* White color for title */
+            font-size: 30px;
+        }
+
+        /* Container for content */
+        .container {
+            margin-top: 30px;
+            padding: 0 15px;
+            width: 60%; /* Set the width to 60% */
+            margin: 0 auto; /* Center align the content */
+        }
+
+        /* Styles for definition list (dl) */
+        dl.dl-horizontal {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+            dl.dl-horizontal dt {
+                width: 200px;
+                font-weight: bold;
+                padding-right: 15px;
+            }
+
+            dl.dl-horizontal dd {
+                flex: 1;
+                margin-bottom: 10px;
+            }
+
+        /* Footer Style */
+        footer {
+            background-color: #1b6ae7; /* Sky Blue Color */
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>@ViewBag.Title</h2>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <div>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.TotalSales)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TotalSales)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 ETradingClient. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

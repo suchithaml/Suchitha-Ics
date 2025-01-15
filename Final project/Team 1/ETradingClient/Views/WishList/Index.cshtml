@@ -1,0 +1,32 @@
+﻿
+@model List<Webapi_client.Models.WishListItem>
+
+<h2>Your Wishlist</h2>
+@if (Model == null || !Model.Any())
+{
+<p>Your wishlist is empty.</p> }
+            else
+            {
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>
+        <img src="@Url.Content("~/images/" + item.ImageUrl)" alt="@item.ProductName" style="width: 50px;" />
+        @item.ProductName
+    </td>
+    <td>@item.Price</td>
+    <td>
+        @Html.ActionLink("Remove", "RemoveFromWishlist", new { productId = item.ProductID })
+    </td>
+</tr>}
+    </tbody>
+</table>}

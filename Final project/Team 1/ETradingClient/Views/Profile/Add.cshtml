@@ -1,0 +1,63 @@
+﻿@model ETradingClient.Models.Customer
+
+@{ ViewBag.Title = "Add Profile"; }
+ 
+<div class="container mt-5">
+<h2 class="text-center text-primary">Add Your Profile</h2>
+ 
+    @if (ViewBag.Message != null)
+    {
+<div class="alert alert-success text-center mt-3">@ViewBag.Message</div> }
+            else if (ViewBag.ErrorMessage != null)
+            {
+<div class="alert alert-danger text-center mt-3">@ViewBag.ErrorMessage</div>}
+ 
+    @using (Html.BeginForm("Add", "Profile", FormMethod.Post, new { @class = "needs-validation" }))
+    {
+<div class="card mt-4">
+<div class="card-header bg-primary text-white">
+<h4 class="mb-0">Profile Details</h4>
+</div>
+<div class="card-body">
+<div class="form-group">
+<label for="CustomerName">Name</label>
+            @Html.TextBoxFor(m => m.CustomerName, new { @class = "form-control", @id = "CustomerName", @required = "required" })
+            @Html.ValidationMessageFor(m => m.CustomerName, "", new { @class = "text-danger" })
+</div>
+ 
+        <div class="form-group">
+<label for="CustomerPhoneNo">Phone Number</label>
+            @Html.TextBoxFor(m => m.CustomerPhoneNo, new { @class = "form-control", @id = "CustomerPhoneNo" })
+            @Html.ValidationMessageFor(m => m.CustomerPhoneNo, "", new { @class = "text-danger" })
+</div>
+ 
+        <div class="form-group">
+<label for="CustomerAddress">Address</label>
+            @Html.TextAreaFor(m => m.CustomerAddress, new { @class = "form-control", @id = "CustomerAddress" })
+            @Html.ValidationMessageFor(m => m.CustomerAddress, "", new { @class = "text-danger" })
+</div>
+ 
+        <div class="form-group">
+<label for="CustomerEmailID">Email</label>
+            @Html.TextBoxFor(m => m.CustomerEmailID, new { @class = "form-control", @type = "email", @id = "CustomerEmailID", @required = "required" })
+            @Html.ValidationMessageFor(m => m.CustomerEmailID, "", new { @class = "text-danger" })
+</div>
+ 
+        <div class="form-group text-center mt-4">
+<button type="submit" class="btn btn-success px-4">Create Profile</button>
+</div>
+</div>
+</div>}
+ 
+</div>
+ 
+<style>
+    .container {
+        max-width: 700px;
+    }
+ 
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+</style>

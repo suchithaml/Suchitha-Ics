@@ -1,0 +1,78 @@
+﻿@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<style>
+    .category-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+        .category-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .category-buttons button:hover {
+                background-color: #0056b3;
+            }
+</style>
+
+@{ ViewBag.Title = "Categories"; }
+
+<div class="category-buttons">
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Electronics" })'">
+        Electronics
+    </button>
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Clothing" })'">
+        Clothing
+    </button>
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Home Appliances" })'">
+        Home Appliances
+    </button>
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Books" })'">
+        Books
+    </button>
+    <button onclick="location.href='@Url.Action("ProductsByStaticCategory", "Products", new { categoryName = "Toys" })'">
+        Toys
+    </button>
+</div>
+<h2>Search for Products</h2>
+<form action="/Products/SearchResults" method="get">
+    <input type="text" id="searchBox" name="query" placeholder="Search products..." autocomplete="off" />
+    <button type="submit" id="searchButton">Search</button>
+</form>
+
+<div id="suggestions"></div>
+
+<script>
+    const searchBox = document.getElementById("searchBox");
+    const suggestions = document.getElementById("suggestions");
+
+    searchBox.addEventListener("input", async () => {
+        const query = searchBox.value.trim();
+        if (query.length >= 2) {
+            const response = await fetch(`/Products/GetSuggestions?query=${query}`);
+            const data = await response.json();
+            suggestions.innerHTML = "";
+            data.forEach(productName => {
+                const div = document.createElement("div");
+                div.textContent = productName;
+                div.className = "suggestion";
+                div.addEventListener("click", () => {
+                    searchBox.value = productName;
+                    suggestions.innerHTML = "";
+                });
+                suggestions.appendChild(div);
+            });
+        } else {
+            suggestions.innerHTML = "";
+        }
+    });
+</script>
+

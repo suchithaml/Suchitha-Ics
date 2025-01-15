@@ -1,0 +1,50 @@
+﻿@model List<ETradingClient.Models.OrderwithDetails>
+
+<h2>Orders with Details</h2>
+
+@if (ViewData["NoOrdersMessage"] != null)
+{
+<div class="alert alert-warning">
+    @ViewData["NoOrdersMessage"]
+</div>}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer ID</th>
+            <th>Vendor ID</th>
+            <th style="display:none">Order Total</th>
+            <th style="display:block">Order Status</th>
+            <th >Order Date</th>
+            <th style="display:none">Order Detail ID</th>
+            <th>Product ID</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+foreach (var item in Model)
+{
+<tr>
+    <td>@item.OrderID</td>
+    <td>@item.CustomerID</td>
+    <td>@item.VendorID</td>
+    <td style="display:none">@item.OrderTotal</td>
+    <td >@item.OrderStatus</td>
+    <td>@item.OrderDate</td>
+    <td style="display:none">@item.OrderDetailID</td >
+    <td>@item.ProductID</td>
+    <td>@item.Quantity</td>
+    <td>@item.TotalPrice</td>
+</tr>} 
+  }
+            else
+            {
+<tr>
+    <td colspan="10" class="text-center">No orders available</td>
+</tr>}
+    </tbody>
+</table>
